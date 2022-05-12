@@ -4,29 +4,33 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class MyUser implements UserDetails {
 
     private final String userName;
     private final String password;
     private boolean active;
-    private List<GrantedAuthority> authorities;
+    private List<SimpleGrantedAuthority> authorities;// =new ArrayList<>();
 
     public MyUser(User user) {
         this.userName = user.getUserName();
         this.password=user.getPassword();
         this.active=user.isActive();
-        this.authorities= Arrays.stream(user.getRoles().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+//        this.authorities= Arrays.stream(user.getRoles().split(","))
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toList());
+        user.getAuthorities().forEach(authority -> {
+            authorities.add(new SimpleGrantedAuthority(authority.getRoles()));
+        });
+//        this.authorities=Arrays.stream(user.getAuthorities().forEach(authority -> {
+//            authorities.add(new SimpleGrantedAuthority(authority.getRoles()))
+//        });)
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+       // return //(Collection<? extends GrantedAuthority>) authorities;
         return authorities;
     }
 

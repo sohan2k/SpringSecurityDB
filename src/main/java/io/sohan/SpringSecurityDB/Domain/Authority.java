@@ -1,9 +1,9 @@
 package io.sohan.SpringSecurityDB.Domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 public class Authority {
     @Id
@@ -11,6 +11,8 @@ public class Authority {
     private int id;
     private String roles;
 
+    @ManyToMany(mappedBy = "authorities")
+    private Set<User> user;
     public int getId() {
         return id;
     }
@@ -25,5 +27,13 @@ public class Authority {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    public Set<User> getUser() {
+        return user;
+    }
+
+    public void setUser(Set<User> user) {
+        this.user = user;
     }
 }

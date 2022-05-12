@@ -1,9 +1,8 @@
 package io.sohan.SpringSecurityDB.Domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -14,7 +13,11 @@ public class User {
     private String userName;
     private String password;
     private boolean active;
-    private String roles;
+    //private String roles;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "user_authority",joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+    inverseJoinColumns = {@JoinColumn(name="authority_id",referencedColumnName = "id")})
+    private Set<Authority> authorities;
 
     public int getId() {
         return id;
@@ -48,11 +51,19 @@ public class User {
         this.active = active;
     }
 
-    public String getRoles() {
-        return roles;
+//    public String getRoles() {
+//        return roles;
+//    }
+//
+//    public void setRoles(String roles) {
+//        this.roles = roles;
+//    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 }
