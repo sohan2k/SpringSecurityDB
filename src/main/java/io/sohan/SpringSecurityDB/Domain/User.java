@@ -1,10 +1,15 @@
 package io.sohan.SpringSecurityDB.Domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.*;
 
+import javax.persistence.*;
+import java.util.Set;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 public class User {
 
@@ -13,46 +18,24 @@ public class User {
     private int id;
     private String userName;
     private String password;
-    private boolean active;
-    private String roles;
+    //private boolean active;
 
-    public int getId() {
-        return id;
-    }
+    @Singular
+    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+    @JoinTable(name="user_role", joinColumns  = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+    inverseJoinColumns = {@JoinColumn(name="role_id",referencedColumnName = "id")})
+    private Set<Role> roles;
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public String getUserName() {
-        return userName;
-    }
+    @Builder.Default
+    private boolean accountNonExpired=true;
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+    @Builder.Default
+    private boolean accountNonLocked=true;
 
-    public String getPassword() {
-        return password;
-    }
+    @Builder.Default
+    private boolean credentialsNonExpired=true;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
+    @Builder.Default
+    private  boolean enabled=true;
 }
