@@ -19,8 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //@Autowired
-    //UserDetailsService userDetailsService;
     @Autowired
     JpaUserDetailService userService;
 
@@ -41,20 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/index").hasRole("USER")
                         .and().formLogin();
 
-//        http.csrf().disable();
-//        http.headers().frameOptions().disable();
-//
-//        http
-//                .authorizeRequests(authorize->{
-//                    authorize
-//                            .antMatchers("/user").hasRole("ADMIN")
-//                            .antMatchers("/index").hasRole("USER");
-//                })
-//                .authorizeRequests()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin().and()
-//                .httpBasic();
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
 
     }
 

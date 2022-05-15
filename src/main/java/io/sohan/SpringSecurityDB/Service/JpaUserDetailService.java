@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 //@RequiredArgsConstructor
 @Configuration
 public class JpaUserDetailService implements UserDetailsService {
@@ -27,8 +26,6 @@ public class JpaUserDetailService implements UserDetailsService {
     public JpaUserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-    //@Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user=userRepository.findByUserName(username);
@@ -36,29 +33,10 @@ public class JpaUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("user name not found"+username);
         }
         Collection<SimpleGrantedAuthority> authorities=new ArrayList<>();
-        user.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        });
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return new org.springframework.security.core.userdetails.User(user.getUserName(),
                 user.getPassword(),user.isEnabled(),user.isAccountNonExpired(),user.isCredentialsNonExpired()
         ,user.isAccountNonLocked(),authorities);
-//        return new org.springframework.security.core.userdetails.User(user.getUserName(),
-//                user.getPassword(),user.isEnabled(),user.isAccountNonExpired(),user.isCredentialsNonExpired()
-//        ,user.isAccountNonLocked(),convertToSpringAuthorities(user.getRoles()));
-
     }
-
-//    private Collection<? extends GrantedAuthority> convertToSpringAuthorities(Set<Role> authorities) {
-//        if(authorities!=null && authorities.size()>0){
-//            return authorities.stream()
-//                    .map(Role::getName)
-//                    .map(SimpleGrantedAuthority::new)
-//                    .collect(Collectors.toSet());
-//        }else{
-//            return new HashSet<>();
-//        }
-//
-//    }
-
 }
 

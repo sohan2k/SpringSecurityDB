@@ -15,7 +15,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-//@Transactional
 //@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
@@ -39,28 +38,4 @@ public class UserServiceImpl implements UserService{
         return userList;
     }
 
-//    @Override
-//    public void addRoleToUser(String username, String rolename) {
-//        User user=userRepository.findByUserName(username);
-//        Role role=roleRepository.findByName(rolename);
-//        user.getRoles().add(role);
-//    }
-
-
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//
-//        User user=userRepository.findByUserName(username);
-//        if(user==null){
-//            throw new UsernameNotFoundException("user name not found"+username);
-//        }
-//        Collection<SimpleGrantedAuthority> authorities=new ArrayList<>();
-//        user.getRoles().forEach(role -> {
-//            authorities.add(new SimpleGrantedAuthority(role.getName()));
-//        });
-//        return new org.springframework.security.core.userdetails.User(user.getUserName(),
-//                user.getPassword(),authorities);
-//        //return new org.springframework.security.core.userdetails.User()
-//
-//    }
 }
