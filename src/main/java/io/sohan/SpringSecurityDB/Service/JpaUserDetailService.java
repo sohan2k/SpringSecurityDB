@@ -34,6 +34,7 @@ public class JpaUserDetailService implements UserDetailsService {
         }
         Collection<SimpleGrantedAuthority> authorities=new ArrayList<>();
         user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+
         return new org.springframework.security.core.userdetails.User(user.getUserName(),
                 user.getPassword(),user.isEnabled(),user.isAccountNonExpired(),user.isCredentialsNonExpired()
         ,user.isAccountNonLocked(),authorities);

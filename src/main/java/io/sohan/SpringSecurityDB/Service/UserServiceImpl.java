@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,9 +22,19 @@ public class UserServiceImpl implements UserService{
     UserRepository userRepository;
     RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    PasswordEncoder passwordEncoder;
+
+//    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+//        this.userRepository = userRepository;
+//        this.roleRepository = roleRepository;
+//
+//    }
+
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -36,6 +47,26 @@ public class UserServiceImpl implements UserService{
         List<User> userList=new ArrayList<>();
         userRepository.findAll().iterator().forEachRemaining(userList::add);
         return userList;
+    }
+
+    @Override
+    public void addUser(User user) {
+        String ps=user.getPassword();
+        user.setPassword(passwordEncoder.encode(ps));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void addRoleToUser(String username, String rolename) {
+        User user=userRepository.findByUserName(username);
+        Role role=roleRepository.findByName(rolename);
+        user.getRoles().add(role);
+
+    }
+
+    @Override
+    public void addRole(Role role) {
+        roleRepository.save(role);
     }
 
 }
