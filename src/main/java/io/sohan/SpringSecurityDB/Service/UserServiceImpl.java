@@ -50,10 +50,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void addUser(User user) {
+    public User addUser(User user) {
         String ps=user.getPassword();
         user.setPassword(passwordEncoder.encode(ps));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
